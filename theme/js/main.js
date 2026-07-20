@@ -171,8 +171,22 @@ document.querySelectorAll('.mob-menu__link').forEach(function(link) {
     if (lenis) lenis.start();
   }
 
+  // Добавить культуру в заявку по её data-product-id (+1 к количеству).
+  function addProductToOrder(pid) {
+    var item = document.querySelector('.order-popup__item[data-product-id="' + pid + '"]');
+    if (!item) return;
+    var qtyInput = item.querySelector('.order-popup__qty');
+    if (!qtyInput) return;
+    qtyInput.value = (parseInt(qtyInput.value, 10) || 0) + 1;
+    qtyInput.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
   document.querySelectorAll('.product-card__btn, .hero__btn-secondary, .wellness__btn, .freshness__btn.js-order-trigger').forEach(function(btn) {
-    btn.addEventListener('click', openPopup);
+    btn.addEventListener('click', function(e) {
+      openPopup(e);
+      var pid = btn.getAttribute('data-product-id');
+      if (pid) addProductToOrder(pid);
+    });
   });
   closeBtn.addEventListener('click', closePopup);
   overlay.addEventListener('click', closePopup);

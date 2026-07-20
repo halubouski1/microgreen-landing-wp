@@ -143,7 +143,7 @@ function microgreen_order_products_html() {
 		while ( $query->have_posts() ) {
 			$query->the_post();
 			$name = get_the_title();
-			$html .= '<div class="order-popup__item"><span class="order-popup__item-name">' . esc_html( $name ) . '</span>'
+			$html .= '<div class="order-popup__item" data-product-id="' . esc_attr( get_the_ID() ) . '"><span class="order-popup__item-name">' . esc_html( $name ) . '</span>'
 				. '<div class="order-popup__stepper">'
 				. '<button type="button" class="order-popup__step" data-dir="-1">&minus;</button>'
 				. '<input class="order-popup__qty" type="text" inputmode="numeric" pattern="[0-9]*" value="0" name="mg_order_qty[' . esc_attr( get_the_ID() ) . ']" aria-label="' . esc_attr( 'Quantità ' . $name ) . '">'
