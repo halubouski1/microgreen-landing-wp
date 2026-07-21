@@ -255,3 +255,69 @@ function microgreen_opt( $name, $default = '' ) {
 function microgreen_tel( $phone ) {
 	return 'tel:' . preg_replace( '/[^0-9+]/', '', $phone );
 }
+
+/**
+ * Иконка-«искорка» для строк блока контактов футера.
+ *
+ * @return string
+ */
+function microgreen_contact_icon() {
+	return '<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.27678 0.641842C9.30639 0.542319 9.39812 0.473633 9.50216 0.473633C9.60621 0.473633 9.69794 0.542319 9.72754 0.641842C9.72754 0.641842 10.14 2.02454 10.5822 3.5076C11.2867 5.87037 13.1349 7.71863 15.4977 8.42314C16.9808 8.86526 18.3635 9.27777 18.3635 9.27777C18.463 9.30737 18.5317 9.3991 18.5317 9.50315C18.5317 9.60719 18.463 9.69892 18.3635 9.72852C18.3635 9.72852 16.9808 10.141 15.4977 10.5832C13.1349 11.2877 11.2867 13.1359 10.5822 15.4987C10.14 16.9817 9.72754 18.3644 9.72754 18.3644C9.69794 18.464 9.60621 18.5327 9.50216 18.5327C9.39812 18.5327 9.30639 18.464 9.27678 18.3644C9.27678 18.3644 8.86428 16.9817 8.42216 15.4987C7.71765 13.1359 5.86938 11.2877 3.50661 10.5832C2.02357 10.141 0.640866 9.72852 0.640866 9.72852C0.541336 9.69892 0.472656 9.60719 0.472656 9.50315C0.472656 9.3991 0.541336 9.30737 0.640866 9.27777C0.640866 9.27777 2.02357 8.86526 3.50661 8.42314C5.86938 7.71863 7.71765 5.87037 8.42216 3.5076C8.86428 2.02454 9.27678 0.641842 9.27678 0.641842Z" fill="#BFBFBF"/></svg>';
+}
+
+/**
+ * Репитер «Contatti» (правый блок футера): этикетка + значение + необязательная ссылка.
+ */
+function microgreen_register_contacts_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_footer_contacts',
+			'title'    => __( 'Contatti (footer)', 'custom-theme' ),
+			'fields'   => array(
+				array(
+					'key'          => 'field_footer_contacts',
+					'label'        => __( 'Righe contatti', 'custom-theme' ),
+					'name'         => 'footer_contacts',
+					'type'         => 'repeater',
+					'layout'       => 'block',
+					'button_label' => __( 'Aggiungi riga', 'custom-theme' ),
+					'instructions' => __( 'Blocco in basso a destra. Link opzionale (vuoto = solo testo). Se vuoto — restano Negozio + Contattare di default.', 'custom-theme' ),
+					'sub_fields'   => array(
+						array(
+							'key'   => 'field_contact_label',
+							'label' => __( 'Etichetta', 'custom-theme' ),
+							'name'  => 'label',
+							'type'  => 'text',
+						),
+						array(
+							'key'   => 'field_contact_value',
+							'label' => __( 'Valore', 'custom-theme' ),
+							'name'  => 'value',
+							'type'  => 'text',
+						),
+						array(
+							'key'          => 'field_contact_url',
+							'label'        => __( 'Link (opzionale)', 'custom-theme' ),
+							'name'         => 'url',
+							'type'         => 'text',
+							'instructions' => __( 'Es. tel:+39…, mailto:…, https://… Vuoto = solo testo.', 'custom-theme' ),
+						),
+					),
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'options_page',
+						'operator' => '==',
+						'value'    => 'site-settings',
+					),
+				),
+			),
+		)
+	);
+}
+add_action( 'acf/init', 'microgreen_register_contacts_fields' );

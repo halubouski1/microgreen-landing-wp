@@ -73,6 +73,24 @@
       </div>
 
       <div class="footer__contacts">
+        <?php if ( function_exists( 'have_rows' ) && have_rows( 'footer_contacts', 'option' ) ) : ?>
+          <?php
+          while ( have_rows( 'footer_contacts', 'option' ) ) :
+              the_row();
+              $c_label = get_sub_field( 'label' );
+              $c_value = get_sub_field( 'value' );
+              $c_url   = get_sub_field( 'url' );
+              ?>
+        <div class="footer__contact-wrap">
+          <span class="footer__contact-label"><?php echo esc_html( $c_label ); ?> <?php echo microgreen_contact_icon(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- статичный SVG. ?></span>
+          <?php if ( $c_url ) : ?>
+          <a href="<?php echo esc_url( $c_url ); ?>" class="footer__contact-value"><?php echo esc_html( $c_value ); ?></a>
+          <?php else : ?>
+          <span class="footer__contact-value footer__contact-value--address"><?php echo esc_html( $c_value ); ?></span>
+          <?php endif; ?>
+        </div>
+        <?php endwhile; ?>
+        <?php else : ?>
         <div class="footer__contact-wrap">
           <span class="footer__contact-label">
             Negozio
@@ -88,6 +106,7 @@
           <?php $mg_phone = microgreen_opt( 'phone', '+393 884 013 999' ); ?>
           <a href="<?php echo esc_attr( microgreen_tel( $mg_phone ) ); ?>" class="footer__contact-value"><?php echo esc_html( $mg_phone ); ?></a>
         </div>
+        <?php endif; ?>
       </div>
 
     </div>
